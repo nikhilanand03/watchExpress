@@ -3,26 +3,35 @@ const axios = require('axios')
 
 const app = express()
 const PORT = 5000
+let date, date1, date2
 
 const serverAPort = 3001;
 const serverBPort = 3002;
 const serverAUrl = `http://localhost:${serverAPort}`;
 const serverBUrl = `http://localhost:${serverBPort}`;
+const requestQueue = [];
 
 let nextServer = 'A'; // implementing a round robin strategy
 
 app.get('/api', async (req, res) => {
   try {
     let response;
+    requestQueue.push(req)
 
     if (nextServer === 'A') {
-      response = await axios.get(`${serverAUrl}`);
-      console.log("Fetched from Server A")
       nextServer = 'B';
+      date1 = new Date()
+      console.log(`Fetching from Server A at ${date1.getTime()}`)
+      response = await axios.get(`${serverAUrl}`);
+      date2 = new Date()
+      console.log(`Fetched from Server A at ${date2.getTime()} diff = ${date2.getTime()-date1.getTime()}`)
     } else {
-      response = await axios.get(`${serverBUrl}`);
-      console.log("Fetched from Server B")
       nextServer = 'A';
+      date1 = new Date()
+      console.log(`Fetching from Server B at ${date1.getTime()}`)
+      response = await axios.get(`${serverBUrl}`);
+      date2 = new Date()
+      console.log(`Fetched from Server B at ${date2.getTime()} diff = ${date2.getTime()-date1.getTime()}`)
     }
 
     res.json(response.data);
