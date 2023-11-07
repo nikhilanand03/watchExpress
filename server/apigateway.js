@@ -10,6 +10,7 @@ const serverBPort = 3002;
 const serverAUrl = `http://localhost:${serverAPort}`;
 const serverBUrl = `http://localhost:${serverBPort}`;
 const requestQueue = [];
+const cap = 100;
 
 let nextServer = 'A'; // implementing a round robin strategy
 

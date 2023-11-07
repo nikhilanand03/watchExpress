@@ -1,4 +1,5 @@
 const express = require('express')
+const crypto = require('crypto')
 const app = express()
 const PORT = 3002
 
@@ -8,10 +9,16 @@ const largeDatabase = [
   // Add more items here
 ];
 
-app.get('/',(req,res)=>{
-    setTimeout(()=>{
-        res.json({ data: largeDatabase });
-    },3000)
+app.get('/',async (req,res)=>{
+    // setTimeout(()=>{
+    //     res.json({ data: largeDatabase });
+    // },3000)
+  const start = Date.now();
+  while (Date.now() - start < 3000) {
+    let a = 1+1; // Consumes CPU cycles
+  }
+  res.json({ data: largeDatabase });
+    
 })
 
 app.listen(PORT,()=>{console.log(`Server started on port ${PORT}`)})
